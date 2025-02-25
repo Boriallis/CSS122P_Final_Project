@@ -31,6 +31,36 @@ public class LotDBAccess {
         return lots;
     }
     
+    public static List<String> getLotsSortedByPrice() {
+        List<String> lots = new ArrayList<>();
+        String query = "SELECT * FROM lots ORDER BY price DESC";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                lots.add("Lot " + rs.getInt("id") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lots;
+    }
+
+    public static List<String> getLotsSortedBySize() {
+        List<String> lots = new ArrayList<>();
+        String query = "SELECT * FROM lots ORDER BY size DESC";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                lots.add("Lot " + rs.getInt("id") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lots;
+    }
+    
     public void updateLotStatus(int id, boolean status){
         try (Connection connect = DBConnect.getConnection();
              PreparedStatement ps = connect.prepareStatement("SELECT * FROM lots")) {
