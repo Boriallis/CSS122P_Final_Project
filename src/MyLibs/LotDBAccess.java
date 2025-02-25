@@ -31,4 +31,16 @@ public class LotDBAccess {
         
         return lots;
     }
+    
+    public void updateLotStatus(int id, boolean status){
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM lots")) {
+
+            ps.setBoolean(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
