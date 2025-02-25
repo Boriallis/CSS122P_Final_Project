@@ -2,7 +2,6 @@ package MyLibs;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import MyLibs.Lot;
 
 public class LotDBAccess {
     public List<Lot> getAllLots(){
@@ -33,8 +32,8 @@ public class LotDBAccess {
     }
     
     public void updateLotStatus(int id, boolean status){
-        try (Connection conn = DBConnect.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM lots")) {
+        try (Connection connect = DBConnect.getConnection();
+             PreparedStatement ps = connect.prepareStatement("SELECT * FROM lots")) {
 
             ps.setBoolean(1, status);
             ps.setInt(2, id);
