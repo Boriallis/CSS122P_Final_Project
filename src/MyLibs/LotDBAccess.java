@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LotDBAccess {
+    //Lists all of the lots
     public List<Lot> getAllLots(){
         List<Lot> lots = new ArrayList<>();
         
@@ -18,7 +19,7 @@ public class LotDBAccess {
                 resultSet.getString("location"),
                 resultSet.getDouble("size"),
                 resultSet.getDouble("price"),
-                resultSet.getBoolean("status")
+                resultSet.getString("status")
                 );
                 lots.add(lot);
             }
@@ -39,7 +40,7 @@ public class LotDBAccess {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                lots.add(rs.getInt("lot_id") + " - Location: " + rs.getString("location") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size") + " - Status: " + rs.getBoolean("status"));
+                lots.add(rs.getInt("lot_id") + " - Location: " + rs.getString("location") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size") + " - Status: " + rs.getString("status"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,15 +65,16 @@ public class LotDBAccess {
     }
     
     //Updates lot status, sold or available
-    public void updateLotStatus(int id, boolean status){
-        try (Connection connect = DBConnect.getConnection();
-             PreparedStatement ps = connect.prepareStatement("SELECT * FROM lots")) {
+    //For future ref, This can be called with updateLotStatus(5, "Sold"); (For ex)
+    public void updateLotStatus(int id, String status) {
+    try (Connection connect = DBConnect.getConnection();
+         PreparedStatement ps = connect.prepareStatement("UPDATE lots SET status = ? WHERE id = ?")) {
 
-            ps.setBoolean(1, status);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ps.setString(1, status);
+        ps.setInt(2, id);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+}
 }

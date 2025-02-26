@@ -5,9 +5,9 @@ public class Lot {
     private String location;
     private double price;
     private double size;
-    private boolean status;
+    private String status;
 
-    public Lot(int id, String location, double price, double size, boolean status) {
+    public Lot(int id, String location, double price, double size, String status) {
         this.id = id;
         this.location = location;
         this.price = price;
@@ -47,16 +47,16 @@ public class Lot {
         this.size = size;
     }
 
-    public boolean status() {
+    public String status() {
         return status;
     }
 
-    public void setstatus(boolean status) {
+    public void setstatus(String status) {
         this.status = status;
     }
     
     public String toString(){
-        return "Lot " + id + " | Location: " + location + " | Price: $" + price + " | Size: " + size + " sqm | " + (status ? "Sold" : "Available");
+        return "Lot " + id + " | Location: " + location + " | Price: $" + price + " | Size: " + size + " sqm | Status: " + status;
     }
     
 }
