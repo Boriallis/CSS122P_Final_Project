@@ -14,7 +14,7 @@ public class LotDBAccess {
             
             while (resultSet.next()){
                 Lot lot = new Lot(
-                resultSet.getInt("id"),
+                resultSet.getInt("lot_id"),
                 resultSet.getString("location"),
                 resultSet.getDouble("size"),
                 resultSet.getDouble("price"),
@@ -31,6 +31,7 @@ public class LotDBAccess {
         return lots;
     }
     
+    //Sorts everything by price, highest to lowest
     public static List<String> getLotsSortedByPrice() {
         List<String> lots = new ArrayList<>();
         String query = "SELECT * FROM lots ORDER BY price DESC";
@@ -38,7 +39,7 @@ public class LotDBAccess {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                lots.add("Lot " + rs.getInt("id") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size"));
+                lots.add(rs.getInt("lot_id") + " - Location: " + rs.getString("location") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size") + " - Status: " + rs.getBoolean("status"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,6 +47,7 @@ public class LotDBAccess {
         return lots;
     }
 
+    //Sorts everything by size, lowest to highest
     public static List<String> getLotsSortedBySize() {
         List<String> lots = new ArrayList<>();
         String query = "SELECT * FROM lots ORDER BY size DESC";
@@ -53,7 +55,7 @@ public class LotDBAccess {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                lots.add("Lot " + rs.getInt("id") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size"));
+                lots.add("Lot " + rs.getInt("lot_id") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,6 +63,7 @@ public class LotDBAccess {
         return lots;
     }
     
+    //Updates lot status, sold or available
     public void updateLotStatus(int id, boolean status){
         try (Connection connect = DBConnect.getConnection();
              PreparedStatement ps = connect.prepareStatement("SELECT * FROM lots")) {
