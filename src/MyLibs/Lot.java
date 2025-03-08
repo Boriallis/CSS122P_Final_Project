@@ -6,13 +6,15 @@ public class Lot {
     private double price;
     private double size;
     private String status;
+    private Integer ownerId;
 
-    public Lot(int id, String location, double price, double size, String status) {
+    public Lot(int id, String location, double price, double size, String status, Integer ownerId) {
         this.id = id;
         this.location = location;
         this.price = price;
         this.size = size;
         this.status = status;
+        this.ownerId = ownerId;
     }
 
     public int getId() {
@@ -55,8 +57,18 @@ public class Lot {
         this.status = status;
     }
     
-    public String toString(){
-        return "Lot " + id + " | Location: " + location + " | Price: $" + price + " | Size: " + size + " sqm | Status: " + status;
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
+    
+    public String toString() {
+        return "Lot " + id + " | Location: " + location + " | Price: $" + price 
+                + " | Size: " + size + " sqm | Status: " + status 
+                + " | Owner: " + (ownerId == null ? "None" : ownerId);
     }
     
 }

@@ -19,7 +19,8 @@ public class LotDBAccess {
                 resultSet.getString("location"),
                 resultSet.getDouble("size"),
                 resultSet.getDouble("price"),
-                resultSet.getString("status")
+                resultSet.getString("status"),
+                resultSet.getInt("owner_id")
                 );
                 lots.add(lot);
             }
@@ -140,7 +141,8 @@ public class LotDBAccess {
                 rs.getString("location"),
                 rs.getDouble("price"),
                 rs.getDouble("size"),
-                rs.getString("status")
+                rs.getString("status"),
+                rs.getInt("owner_id")
             );
             results.add(lot);
         }
@@ -156,14 +158,33 @@ public class LotDBAccess {
     //Updates lot status, sold or available
     //For future ref, This can be called with updateLotStatus(5, "Sold"); (For ex)
     public void updateLotStatus(int id, String status) {
-    try (Connection connect = DBConnect.getConnection();
-         PreparedStatement ps = connect.prepareStatement("UPDATE lots SET status = ? WHERE id = ?")) {
+        try (Connection connect = DBConnect.getConnection();
+             PreparedStatement ps = connect.prepareStatement("UPDATE lots SET status = ? WHERE id = ?")) {
 
-        ps.setString(1, status);
-        ps.setInt(2, id);
-        ps.executeUpdate();
-    } catch (SQLException e) {
-        e.printStackTrace();
+            ps.setString(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+    
+    public void updateLotStatusAndOwner(int lotId, String newStatus, Integer newOwnerId) {
+        String query = "UPDATE lots SET status = ?, owner_id = ? WHERE lot_id = ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+             ps.setString(1, newStatus);
+             if(newOwnerId == null) {
+                 ps.setNull(2, java.sql.Types.INTEGER);
+             } else {
+                 ps.setInt(2, newOwnerId);
+             }
+             ps.setInt(3, lotId);
+             ps.executeUpdate();
+        } catch (SQLException e) {
+             e.printStackTrace();
+        }
     }
+
 }

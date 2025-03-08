@@ -1,6 +1,8 @@
 package MyApp;
 
+import MyLibs.Account;
 import MyLibs.LotDBAccess;
+import MyLibs.Session;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -24,6 +26,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         lotsMenu = new javax.swing.JButton();
+        accountMenu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -36,25 +39,37 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
+        accountMenu.setText("Account");
+        accountMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accountMenuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(77, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1)
-                    .addComponent(lotsMenu))
-                .addContainerGap(186, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lotsMenu)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(accountMenu)))
+                .addGap(115, 115, 115))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(60, 60, 60)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(lotsMenu)
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(accountMenu)
+                    .addComponent(lotsMenu))
+                .addContainerGap(172, Short.MAX_VALUE))
         );
 
         pack();
@@ -64,6 +79,24 @@ public class MainMenu extends javax.swing.JFrame {
         LotsDisplay lotsDisplay = new LotsDisplay();
         lotsDisplay.setVisible(true);
     }//GEN-LAST:event_lotsMenuActionPerformed
+
+    private void accountMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountMenuActionPerformed
+        Account currentAccount = Session.getCurrentAccount();
+        if (currentAccount == null) {
+            // No user logged in – so create or load the default account.
+            try {
+                // Ensure that a user with user_id 1 exists in your database.
+                currentAccount = new Account(1); // Make sure your Account constructor is fixed!
+                Session.setCurrentAccount(currentAccount);
+                System.out.println("Default account set: " + currentAccount.getUserId());
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Default account creation failed!");
+                return;
+            }
+        }
+        new UserAccount(currentAccount).setVisible(true);
+    }//GEN-LAST:event_accountMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -101,6 +134,7 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton accountMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton lotsMenu;
     // End of variables declaration//GEN-END:variables
