@@ -4,8 +4,12 @@
  */
 package MyApp;
 
+import MyLibs.Account;
 import MyLibs.Lot;
+import MyLibs.LotDBAccess;
+import MyLibs.Session;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -58,6 +62,8 @@ public class ShowAllLots extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnBuy = new javax.swing.JButton();
+        btnReserve = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -187,6 +193,20 @@ public class ShowAllLots extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        btnBuy.setText("Buy");
+        btnBuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuyActionPerformed(evt);
+            }
+        });
+
+        btnReserve.setText("Reserve");
+        btnReserve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReserveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,7 +215,11 @@ public class ShowAllLots extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnBuy)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnReserve)))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -205,11 +229,77 @@ public class ShowAllLots extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuy)
+                    .addComponent(btnReserve))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a lot to buy.");
+            return;
+        }
+
+        int lotId = (int) jTable1.getValueAt(selectedRow, 0);
+        String status = (String) jTable1.getValueAt(selectedRow, 4);
+        double lotPrice = (double) jTable1.getValueAt(selectedRow, 2);
+
+        if (!status.equalsIgnoreCase("Available")) {
+            JOptionPane.showMessageDialog(this, "Sorry, already sold/reserved.");
+            return;
+        }
+
+        Account currentAccount = Session.getCurrentAccount();
+        if (currentAccount.getBalance() < lotPrice) {
+            JOptionPane.showMessageDialog(this, "Sorry, Insufficient Balance please Deposit money and try again.");
+            return;
+        }
+
+        // Use the withdraw method to deduct funds
+        currentAccount.withdraw(lotPrice);
+
+        // Update lot status to "Sold" and set the owner_id
+        new LotDBAccess().updateLotStatusAndOwner(lotId, "Sold", currentAccount.getUserId());
+
+        JOptionPane.showMessageDialog(this, "Purchase successful!");
+
+        // Refresh the table data
+        lots = new LotDBAccess().getAllLots();
+        populateTable();
+    }//GEN-LAST:event_btnBuyActionPerformed
+
+    private void btnReserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReserveActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a lot to reserve.");
+            return;
+        }
+
+        int lotId = (int) jTable1.getValueAt(selectedRow, 0);
+        String status = (String) jTable1.getValueAt(selectedRow, 4);
+
+        if (!status.equalsIgnoreCase("Available")) {
+            JOptionPane.showMessageDialog(this, "Sorry, this lot is already " + status + ".");
+            return;
+        }
+
+        // For reservation, we do not deduct balance.
+        // Update the lot status to "Reserved" and update owner_id to current user's id.
+        Account currentAccount = Session.getCurrentAccount();
+        new LotDBAccess().updateLotStatusAndOwner(lotId, "Reserved", currentAccount.getUserId());
+
+        JOptionPane.showMessageDialog(this, "Reservation successful!");
+
+        // Refresh table
+        lots = new LotDBAccess().getAllLots();
+        populateTable();
+    }//GEN-LAST:event_btnReserveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,6 +337,8 @@ public class ShowAllLots extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuy;
+    private javax.swing.JButton btnReserve;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

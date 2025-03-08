@@ -38,6 +38,17 @@ public class Account {
             updateBalanceInDB();
         }
     }
+    
+    public void withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            updateBalanceInDB();
+        } else {
+            // Optionally, you can throw an exception or log an error if there's insufficient balance.
+            System.out.println("Withdrawal failed: insufficient balance or invalid amount.");
+        }
+    }
+
 
     //Fetches user balance
     private double fetchBalanceFromDB() {

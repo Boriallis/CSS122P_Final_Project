@@ -251,7 +251,6 @@ public class SearchResults extends javax.swing.JFrame {
             return;
         }
 
-        // Retrieve lot details from the table (assuming column order as defined above)
         int lotId = (int) jTable1.getValueAt(selectedRow, 0);
         String status = (String) jTable1.getValueAt(selectedRow, 4);
         double lotPrice = (double) jTable1.getValueAt(selectedRow, 2);
@@ -261,22 +260,21 @@ public class SearchResults extends javax.swing.JFrame {
             return;
         }
 
-        // Get current account from Session
         Account currentAccount = Session.getCurrentAccount();
         if (currentAccount.getBalance() < lotPrice) {
             JOptionPane.showMessageDialog(this, "Sorry, Insufficient Balance please Deposit money and try again.");
             return;
         }
 
-        // Deduct the price from the account (Assume you have a withdraw method or use deposit with a negative amount)
-        currentAccount.deposit(-lotPrice);  // If deposit() supports negative values, otherwise create a withdraw() method.
+        // Use the withdraw method to deduct funds
+        currentAccount.withdraw(lotPrice);
 
-        // Update the lot status to "Sold" and set the owner_id to the current user's id.
+        // Update lot status to "Sold" and set the owner_id
         new LotDBAccess().updateLotStatusAndOwner(lotId, "Sold", currentAccount.getUserId());
 
         JOptionPane.showMessageDialog(this, "Purchase successful!");
 
-        // Refresh the table (reload the lots)
+        // Refresh the table data
         lots = new LotDBAccess().getAllLots();
         populateTable();
     }//GEN-LAST:event_btnBuyActionPerformed
