@@ -64,6 +64,95 @@ public class LotDBAccess {
         return lots;
     }
     
+    public static List<String> getLotsBySizeRange(double minSize, double maxSize) {
+    List<String> lots = new ArrayList<>();
+    String query = "SELECT * FROM lots WHERE size BETWEEN ? AND ? ORDER BY size ASC";
+    try (Connection conn = DBConnect.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        stmt.setDouble(1, minSize);
+        stmt.setDouble(2, maxSize);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String lotInfo = String.format(
+                    "Lot %d - Location: %s - Price: %.2f - Size: %.2f - Status: %s",
+                    rs.getInt("lot_id"),
+                    rs.getString("location"),
+                    rs.getDouble("price"),
+                    rs.getDouble("size"),
+                    rs.getString("status")
+                );
+                lots.add(lotInfo);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lots;
+    }
+
+    public static List<String> getLotsByBlock(int blockNumber) {
+    List<String> lots = new ArrayList<>();
+    String query = "SELECT * FROM lots WHERE location = ? ORDER BY lot_id ASC";
+    try (Connection conn = DBConnect.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+        
+        // If your database 'location' column literally stores "Block 1", "Block 2", etc.
+        stmt.setString(1, "Block " + blockNumber);
+        
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String lotInfo = String.format(
+                    "Lot %d - Location: %s - Price: %.2f - Size: %.2f - Status: %s",
+                    rs.getInt("lot_id"),
+                    rs.getString("location"),
+                    rs.getDouble("price"),
+                    rs.getDouble("size"),
+                    rs.getString("status")
+                );
+                lots.add(lotInfo);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return lots;
+    }
+    
+    public static List<Lot> searchLots(String block, double minSize, double maxSize, double minPrice, double maxPrice) {
+    List<Lot> results = new ArrayList<>();
+    // Use LIKE with a wildcard so that input "Block 1" matches "Block 1 - Lot 1", "Block 1 - Lot 2", etc.
+    String query = "SELECT * FROM lots WHERE location LIKE ? AND size BETWEEN ? AND ? AND price BETWEEN ? AND ?";
+    try (Connection conn = DBConnect.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+        stmt.setString(1, block + "%");  // Append '%' to match any lot number after "Block 1"
+        stmt.setDouble(2, minSize);
+        stmt.setDouble(3, maxSize);
+        stmt.setDouble(4, minPrice);
+        stmt.setDouble(5, maxPrice);
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Lot lot = new Lot(
+                rs.getInt("lot_id"),
+                rs.getString("location"),
+                rs.getDouble("price"),
+                rs.getDouble("size"),
+                rs.getString("status")
+            );
+            results.add(lot);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return results;
+}
+
+
+
+    
     //Updates lot status, sold or available
     //For future ref, This can be called with updateLotStatus(5, "Sold"); (For ex)
     public void updateLotStatus(int id, String status) {
@@ -76,5 +165,5 @@ public class LotDBAccess {
     } catch (SQLException e) {
         e.printStackTrace();
     }
-}
+    }
 }

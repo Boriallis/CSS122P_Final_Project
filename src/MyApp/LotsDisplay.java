@@ -1,5 +1,6 @@
 package MyApp;
 
+import MyLibs.Lot;
 import MyLibs.LotDBAccess;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -23,6 +24,7 @@ public class LotsDisplay extends javax.swing.JFrame {
     private void initComponents() {
 
         showlots = new javax.swing.JButton();
+        search = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -33,6 +35,13 @@ public class LotsDisplay extends javax.swing.JFrame {
             }
         });
 
+        search.setText("Search For A Lot");
+        search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -40,13 +49,17 @@ public class LotsDisplay extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(showlots)
-                .addContainerGap(302, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(search)
+                .addContainerGap(168, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(showlots)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(showlots)
+                    .addComponent(search))
                 .addContainerGap(252, Short.MAX_VALUE))
         );
 
@@ -54,9 +67,16 @@ public class LotsDisplay extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void showlotsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showlotsActionPerformed
-        List<String> lots = LotDBAccess.getLotsSortedByPrice();
-        JOptionPane.showMessageDialog(this, String.join("\n", lots), "Available Lots", JOptionPane.INFORMATION_MESSAGE);
+        LotDBAccess db = new LotDBAccess();
+        List<Lot> allLots = db.getAllLots();
+        ShowAllLots display = new ShowAllLots(allLots);
+        display.setVisible(true);
     }//GEN-LAST:event_showlotsActionPerformed
+
+    private void searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchActionPerformed
+        SearchPrompt search = new SearchPrompt();
+        search.setVisible(true);
+    }//GEN-LAST:event_searchActionPerformed
 
     /**
      * @param args the command line arguments
@@ -94,6 +114,7 @@ public class LotsDisplay extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton search;
     private javax.swing.JButton showlots;
     // End of variables declaration//GEN-END:variables
 }
