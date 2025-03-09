@@ -23,9 +23,7 @@ public class SearchPrompt extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        block = new javax.swing.JLabel();
-        blockinput = new javax.swing.JTextField();
-        minsize = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         minsizeInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         maxsizeInput = new javax.swing.JTextField();
@@ -34,18 +32,17 @@ public class SearchPrompt extends javax.swing.JFrame {
         maxprice = new javax.swing.JLabel();
         maxpriceInput = new javax.swing.JTextField();
         search = new javax.swing.JButton();
+        block = new javax.swing.JLabel();
+        blockinput = new javax.swing.JTextField();
+        minsize = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator6 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        block.setText("Pick Your Desired Block Number (1-5)");
-
-        blockinput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                blockinputActionPerformed(evt);
-            }
-        });
-
-        minsize.setText("Minimum Size Requirement");
+        jPanel1.setBackground(new java.awt.Color(220, 215, 201));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Enter Specifications:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14), new java.awt.Color(44, 57, 48))); // NOI18N
 
         minsizeInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -53,6 +50,7 @@ public class SearchPrompt extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Maximum Size Requirement");
 
         maxsizeInput.addActionListener(new java.awt.event.ActionListener() {
@@ -61,8 +59,10 @@ public class SearchPrompt extends javax.swing.JFrame {
             }
         });
 
+        minprice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         minprice.setText("Minimum Price Requirement");
 
+        maxprice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         maxprice.setText("Maximum Price Requirement");
 
         maxpriceInput.addActionListener(new java.awt.event.ActionListener() {
@@ -71,6 +71,9 @@ public class SearchPrompt extends javax.swing.JFrame {
             }
         });
 
+        search.setBackground(new java.awt.Color(102, 153, 255));
+        search.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        search.setForeground(new java.awt.Color(255, 255, 255));
         search.setText("Search");
         search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,14 +81,27 @@ public class SearchPrompt extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+        block.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        block.setText("Pick Your Desired Block Number (1-5)");
+
+        blockinput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blockinputActionPerformed(evt);
+            }
+        });
+
+        minsize.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        minsize.setText("Minimum Size Requirement");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(block, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(blockinput)
                         .addComponent(minsize)
@@ -95,14 +111,13 @@ public class SearchPrompt extends javax.swing.JFrame {
                         .addComponent(minprice)
                         .addComponent(minpriceInput)
                         .addComponent(maxprice)
-                        .addComponent(maxpriceInput))
-                    .addComponent(search))
-                .addContainerGap(421, Short.MAX_VALUE))
+                        .addComponent(maxpriceInput)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addComponent(block)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(blockinput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -124,7 +139,54 @@ public class SearchPrompt extends javax.swing.JFrame {
                 .addComponent(maxpriceInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(search)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        jPanel6.setBackground(new java.awt.Color(44, 57, 48));
+        jPanel6.setForeground(new java.awt.Color(204, 204, 255));
+
+        jLabel6.setBackground(new java.awt.Color(204, 204, 255));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Lot Area Management: Lot Nagivation");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSeparator6)
+                .addContainerGap())
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel6)
+                .addContainerGap(336, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -206,6 +268,10 @@ public class SearchPrompt extends javax.swing.JFrame {
     private javax.swing.JLabel block;
     private javax.swing.JTextField blockinput;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JLabel maxprice;
     private javax.swing.JTextField maxpriceInput;
     private javax.swing.JTextField maxsizeInput;
