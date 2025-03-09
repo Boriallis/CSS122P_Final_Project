@@ -68,8 +68,11 @@ public class ShowAllLots extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(44, 57, 48));
         jLabel1.setText("These Are All of our Available Lots");
 
+        jTable1.setBackground(new java.awt.Color(220, 215, 201));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -194,6 +197,9 @@ public class ShowAllLots extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        btnBuy.setBackground(new java.awt.Color(102, 153, 255));
+        btnBuy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuy.setForeground(new java.awt.Color(255, 255, 255));
         btnBuy.setText("Buy");
         btnBuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,6 +207,9 @@ public class ShowAllLots extends javax.swing.JFrame {
             }
         });
 
+        btnReserve.setBackground(new java.awt.Color(102, 153, 255));
+        btnReserve.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnReserve.setForeground(new java.awt.Color(255, 255, 255));
         btnReserve.setText("Reserve");
         btnReserve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -230,7 +239,7 @@ public class ShowAllLots extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuy)
                     .addComponent(btnReserve))

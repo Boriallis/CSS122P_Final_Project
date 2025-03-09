@@ -72,8 +72,11 @@ public class SearchResults extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        sr.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        sr.setForeground(new java.awt.Color(44, 57, 48));
         sr.setText("Search Results");
 
+        jTable1.setBackground(new java.awt.Color(220, 215, 201));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -239,7 +242,7 @@ public class SearchResults extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuy)
                     .addComponent(btnReserve))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         pack();
