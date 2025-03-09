@@ -25,6 +25,8 @@ public class LotsDisplay extends javax.swing.JFrame {
 
         showlots = new javax.swing.JButton();
         search = new javax.swing.JButton();
+        ShowBySize = new javax.swing.JButton();
+        ShowByPrice = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -42,16 +44,34 @@ public class LotsDisplay extends javax.swing.JFrame {
             }
         });
 
+        ShowBySize.setText("Show lots by Size");
+        ShowBySize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ShowBySizeActionPerformed(evt);
+            }
+        });
+
+        ShowByPrice.setText("Show lots by Price");
+        ShowByPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ShowByPriceActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(showlots)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(showlots)
+                    .addComponent(ShowBySize))
                 .addGap(18, 18, 18)
-                .addComponent(search)
-                .addContainerGap(168, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ShowByPrice)
+                    .addComponent(search))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -60,7 +80,11 @@ public class LotsDisplay extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(showlots)
                     .addComponent(search))
-                .addContainerGap(252, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ShowBySize)
+                    .addComponent(ShowByPrice))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
 
         pack();
@@ -77,6 +101,18 @@ public class LotsDisplay extends javax.swing.JFrame {
         SearchPrompt search = new SearchPrompt();
         search.setVisible(true);
     }//GEN-LAST:event_searchActionPerformed
+
+    private void ShowBySizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowBySizeActionPerformed
+        List<Lot> sortedBySize = new LotDBAccess().getLotsSortedBySize();
+        LotsBySize lbsize = new LotsBySize(this, true, sortedBySize);
+        lbsize.setVisible(true);
+    }//GEN-LAST:event_ShowBySizeActionPerformed
+
+    private void ShowByPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowByPriceActionPerformed
+        List<Lot> sortedByPrice = new LotDBAccess().getLotsSortedByPrice();
+        LotsByPrice lbprice = new LotsByPrice(this, true, sortedByPrice);
+        lbprice.setVisible(true);
+    }//GEN-LAST:event_ShowByPriceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -114,6 +150,8 @@ public class LotsDisplay extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ShowByPrice;
+    private javax.swing.JButton ShowBySize;
     private javax.swing.JButton search;
     private javax.swing.JButton showlots;
     // End of variables declaration//GEN-END:variables

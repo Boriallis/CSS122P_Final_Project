@@ -34,14 +34,21 @@ public class LotDBAccess {
     }
     
     //Sorts everything by price, highest to lowest
-    public static List<String> getLotsSortedByPrice() {
-        List<String> lots = new ArrayList<>();
-        String query = "SELECT * FROM lots ORDER BY price DESC";
+    public List<Lot> getLotsSortedByPrice() {
+        List<Lot> lots = new ArrayList<>();
+        String query = "SELECT * FROM lots ORDER BY price DESC";  // highest to lowest
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                lots.add(rs.getInt("lot_id") + " - Location: " + rs.getString("location") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size") + " - Status: " + rs.getString("status"));
+                int lotId = rs.getInt("lot_id");
+                String location = rs.getString("location");
+                double price = rs.getDouble("price");
+                double size = rs.getDouble("size");
+                String status = rs.getString("status");
+                int tempOwner = rs.getInt("owner_id");
+                Integer ownerId = rs.wasNull() ? null : tempOwner;
+                lots.add(new Lot(lotId, location, price, size, status, ownerId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,14 +57,21 @@ public class LotDBAccess {
     }
 
     //Sorts everything by size, lowest to highest
-    public static List<String> getLotsSortedBySize() {
-        List<String> lots = new ArrayList<>();
-        String query = "SELECT * FROM lots ORDER BY size DESC";
+    public List<Lot> getLotsSortedBySize() {
+        List<Lot> lots = new ArrayList<>();
+        String query = "SELECT * FROM lots ORDER BY size DESC";  // highest to lowest
         try (Connection conn = DBConnect.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                lots.add("Lot " + rs.getInt("lot_id") + " - Price: " + rs.getDouble("price") + " - Size: " + rs.getDouble("size"));
+                int lotId = rs.getInt("lot_id");
+                String location = rs.getString("location");
+                double price = rs.getDouble("price");
+                double size = rs.getDouble("size");
+                String status = rs.getString("status");
+                int tempOwner = rs.getInt("owner_id");
+                Integer ownerId = rs.wasNull() ? null : tempOwner;
+                lots.add(new Lot(lotId, location, price, size, status, ownerId));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,6 +79,7 @@ public class LotDBAccess {
         return lots;
     }
     
+    //sorts by size
     public static List<String> getLotsBySizeRange(double minSize, double maxSize) {
     List<String> lots = new ArrayList<>();
     String query = "SELECT * FROM lots WHERE size BETWEEN ? AND ? ORDER BY size ASC";
@@ -92,7 +107,8 @@ public class LotDBAccess {
     }
     return lots;
     }
-
+    
+    //sorts by block
     public static List<String> getLotsByBlock(int blockNumber) {
     List<String> lots = new ArrayList<>();
     String query = "SELECT * FROM lots WHERE location = ? ORDER BY lot_id ASC";
@@ -121,36 +137,36 @@ public class LotDBAccess {
     return lots;
     }
     
+    //search function
     public static List<Lot> searchLots(String block, double minSize, double maxSize, double minPrice, double maxPrice) {
-    List<Lot> results = new ArrayList<>();
-    String query = "SELECT * FROM lots WHERE location LIKE ? AND size BETWEEN ? AND ? AND price BETWEEN ? AND ?";
-    try (Connection conn = DBConnect.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(query)) {
+        List<Lot> results = new ArrayList<>();
+        String query = "SELECT * FROM lots WHERE location LIKE ? AND size BETWEEN ? AND ? AND price BETWEEN ? AND ?";
+        try (Connection conn = DBConnect.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        stmt.setString(1, block + "%");
-        stmt.setDouble(2, minSize);
-        stmt.setDouble(3, maxSize);
-        stmt.setDouble(4, minPrice);
-        stmt.setDouble(5, maxPrice);
+            stmt.setString(1, block + "%");
+            stmt.setDouble(2, minSize);
+            stmt.setDouble(3, maxSize);
+            stmt.setDouble(4, minPrice);
+            stmt.setDouble(5, maxPrice);
 
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Lot lot = new Lot(
-                rs.getInt("lot_id"),
-                rs.getString("location"),
-                rs.getDouble("price"),
-                rs.getDouble("size"),
-                rs.getString("status"),
-                rs.getInt("owner_id")
-            );
-            results.add(lot);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Lot lot = new Lot(
+                    rs.getInt("lot_id"),
+                    rs.getString("location"),
+                    rs.getDouble("price"),
+                    rs.getDouble("size"),
+                    rs.getString("status"),
+                    rs.getInt("owner_id")
+                );
+                results.add(lot);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return results;
     }
-    return results;
-}
-
 
 
     
@@ -167,6 +183,7 @@ public class LotDBAccess {
         }
     }
     
+    //updates when lot is bought
     public void updateLotStatusAndOwner(int lotId, String newStatus, Integer newOwnerId) {
         String query = "UPDATE lots SET status = ?, owner_id = ? WHERE lot_id = ?";
         try (Connection conn = DBConnect.getConnection();
