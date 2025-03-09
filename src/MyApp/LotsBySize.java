@@ -31,8 +31,8 @@ public class LotsBySize extends javax.swing.JDialog {
             model.addRow(new Object[]{
                 lot.getId(),
                 lot.getLocation(),
-                lot.getPrice(),
                 lot.getSize(),
+                lot.getPrice(),
                 lot.status(),
                 ownerText
             });
@@ -160,7 +160,7 @@ public class LotsBySize extends javax.swing.JDialog {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Lot ID", "Location", "Price", "Size", "Status", "Owner"
+                "Lot ID", "Location", "Size", "Price", "Status", "Owner"
             }
         ) {
             Class[] types = new Class [] {

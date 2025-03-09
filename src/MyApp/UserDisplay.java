@@ -20,8 +20,7 @@ public class UserDisplay extends javax.swing.JFrame {
     }
     
     private void loadUsers() {
-        // Query your database to get all users.
-        // For simplicity, assume a method UserDBAccess.getAllUsers() returns a List<User>
+        // Query database to get all users.
         users = Account.getAllUsers();
         
         DefaultListModel<String> listModel = new DefaultListModel<>();

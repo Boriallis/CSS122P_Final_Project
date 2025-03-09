@@ -25,8 +25,8 @@ public class RegisterUser extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         password = new javax.swing.JLabel();
-        txtBalance = new javax.swing.JLabel();
-        txtUsername2 = new javax.swing.JTextField();
+        balance = new javax.swing.JLabel();
+        txtBalance = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
         Submit = new javax.swing.JButton();
 
@@ -36,7 +36,7 @@ public class RegisterUser extends javax.swing.JDialog {
 
         password.setText("Password:");
 
-        txtBalance.setText("Starting Balance:");
+        balance.setText("Starting Balance:");
 
         Submit.setText("Submit");
         Submit.addActionListener(new java.awt.event.ActionListener() {
@@ -56,8 +56,8 @@ public class RegisterUser extends javax.swing.JDialog {
                         .addComponent(jLabel1)
                         .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                         .addComponent(password)
-                        .addComponent(txtBalance)
-                        .addComponent(txtUsername2, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                        .addComponent(balance)
+                        .addComponent(txtBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                         .addComponent(txtPassword))
                     .addComponent(Submit))
                 .addContainerGap(249, Short.MAX_VALUE))
@@ -74,9 +74,9 @@ public class RegisterUser extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtBalance)
+                .addComponent(balance)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUsername2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Submit)
                 .addContainerGap(103, Short.MAX_VALUE))
@@ -89,6 +89,7 @@ public class RegisterUser extends javax.swing.JDialog {
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword()).trim();
         String balanceStr = txtBalance.getText().trim();
+        System.out.println("Balance input: '" + balanceStr + "'");
         
         if(username.isEmpty() || password.isEmpty() || balanceStr.isEmpty()){
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
@@ -153,11 +154,11 @@ public class RegisterUser extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Submit;
+    private javax.swing.JLabel balance;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel password;
-    private javax.swing.JLabel txtBalance;
+    private javax.swing.JTextField txtBalance;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
-    private javax.swing.JTextField txtUsername2;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 public class Account {
-    private double balance;
+    private BigDecimal balance;
     private int user_id;
 
     public Account(int userId) {
@@ -18,11 +19,12 @@ public class Account {
     
     public static Account fromUser(User user) {
         Account account = new Account(user.getId());
-        account.balance = user.getBalance();
+        account.balance = BigDecimal.valueOf(user.getBalance());
         return account;
     }
 
-    public double getBalance() {
+
+    public BigDecimal getBalance() {
         return balance;
     }
     
@@ -30,50 +32,59 @@ public class Account {
         return user_id;
     }
 
-    public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
+    public void deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) > 0) {
+            balance = balance.add(amount);
             updateBalanceInDB();
         }
     }
+
     
-    public void withdraw(double amount) {
-        if (amount > 0 && balance >= amount) {
-            balance -= amount;
+    public void withdraw(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            // Amount must be positive
+            return;
+        }
+        if (balance.compareTo(amount) >= 0) {
+            balance = balance.subtract(amount);
             updateBalanceInDB();
         } else {
-            System.out.println("Withdrawal failed: insufficient balance or invalid amount.");
+            throw new IllegalArgumentException("Insufficient balance");
         }
     }
 
 
     //Fetches user balance
-    private double fetchBalanceFromDB() {
-        double balance = 0.0;
+    private BigDecimal fetchBalanceFromDB() {
+        BigDecimal dbBalance = BigDecimal.ZERO;
+        String query = "SELECT balance FROM users WHERE user_id = ?";
         try (Connection conn = DBConnect.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT balance FROM users WHERE user_id = ?")) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                balance = rs.getDouble("balance");
+                dbBalance = rs.getBigDecimal("balance");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return balance;
+        return dbBalance;
     }
 
     //Updates user balance
     private void updateBalanceInDB() {
+        String query = "UPDATE users SET balance = ? WHERE user_id = ?";
         try (Connection conn = DBConnect.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE users SET balance = ? WHERE user_id = ?")) {
-            stmt.setDouble(1, balance);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setBigDecimal(1, balance);
             stmt.setInt(2, user_id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+
     
     //registers a new user
     public static boolean registerUser(String username, String password, double balance) {

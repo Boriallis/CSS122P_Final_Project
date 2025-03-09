@@ -2,6 +2,7 @@ package MyApp;
 
 import MyLibs.Account;
 import MyLibs.Session;
+import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 
 public class UserAccount extends javax.swing.JFrame {
@@ -19,7 +20,7 @@ public class UserAccount extends javax.swing.JFrame {
     
     public void updateDisplay(){
         username.setText("User ID: " + currentAccount.getUserId());
-        balance.setText("Balance: PhP" + currentAccount.getBalance());
+        balance.setText("Balance: PhP" + currentAccount.getBalance().toPlainString());
     }
 
     /**
@@ -107,8 +108,9 @@ public class UserAccount extends javax.swing.JFrame {
         String amountStr = JOptionPane.showInputDialog(this, "Enter deposit amount:");
         if (amountStr != null && !amountStr.isEmpty()) {
             try {
-                double amount = Double.parseDouble(amountStr);
-                currentAccount.deposit(amount);  // This calls deposit() in Account.java which updates the DB.
+                // Parse the input as double and convert to BigDecimal.
+                BigDecimal depositAmount = BigDecimal.valueOf(Double.parseDouble(amountStr));
+                currentAccount.deposit(depositAmount);  // Calls deposit(BigDecimal) in Account.java.
                 updateDisplay();  // Refresh the UI with the new balance.
                 JOptionPane.showMessageDialog(this, "Deposit successful!");
             } catch (NumberFormatException ex) {

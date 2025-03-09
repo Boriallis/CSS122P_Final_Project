@@ -8,6 +8,7 @@ import MyLibs.Account;
 import MyLibs.Lot;
 import MyLibs.LotDBAccess;
 import MyLibs.Session;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -42,8 +43,8 @@ public class SearchResults extends javax.swing.JFrame {
             model.addRow(new Object[] {
                 lot.getId(),
                 lot.getLocation(),
-                lot.getPrice(),
                 lot.getSize(),
+                lot.getPrice(),
                 lot.status(),
                 ownerText
             });
@@ -177,7 +178,7 @@ public class SearchResults extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Lot ID", "Location", "Price", "Size", "Status", "Owner"
+                "Lot ID", "Location", "Size", "Price", "Status", "Owner"
             }
         ) {
             Class[] types = new Class [] {
@@ -251,31 +252,50 @@ public class SearchResults extends javax.swing.JFrame {
             return;
         }
 
+        // Retrieve lot details from the table.
         int lotId = (int) jTable1.getValueAt(selectedRow, 0);
+        double priceDouble = (double) jTable1.getValueAt(selectedRow, 3);
+        BigDecimal lotPrice = BigDecimal.valueOf(priceDouble);
         String status = (String) jTable1.getValueAt(selectedRow, 4);
-        double lotPrice = (double) jTable1.getValueAt(selectedRow, 2);
 
         if (!status.equalsIgnoreCase("Available")) {
-            JOptionPane.showMessageDialog(this, "Sorry, already sold/reserved.");
+            JOptionPane.showMessageDialog(this, "Sorry, this lot is already sold or reserved.");
             return;
         }
 
+        // Get current account from session
         Account currentAccount = Session.getCurrentAccount();
-        if (currentAccount.getBalance() < lotPrice) {
-            JOptionPane.showMessageDialog(this, "Sorry, Insufficient Balance please Deposit money and try again.");
+        if (currentAccount == null) {
+            JOptionPane.showMessageDialog(this, "No account logged in!");
             return;
         }
 
-        // Use the withdraw method to deduct funds
-        currentAccount.withdraw(lotPrice);
+        // Debug: Print current balance and lot price
+        System.out.println("Current Balance: " + currentAccount.getBalance());
+        System.out.println("Lot Price: " + lotPrice);
 
-        // Update lot status to "Sold" and set the owner_id
+        // Check if balance is sufficient
+        if (currentAccount.getBalance().compareTo(lotPrice) < 0) {
+            JOptionPane.showMessageDialog(this, "Sorry, Insufficient Balance. Please deposit money and try again.");
+            return;
+        }
+
+        // Withdraw the lot price from the account
+        try {
+            currentAccount.withdraw(lotPrice);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, "Insufficient balance!");
+            return;
+        }
+
+        // Update lot status and owner_id in the database
         new LotDBAccess().updateLotStatusAndOwner(lotId, "Sold", currentAccount.getUserId());
 
         JOptionPane.showMessageDialog(this, "Purchase successful!");
 
-        // Refresh the table data
-        lots = new LotDBAccess().getAllLots();
+        // Refresh the table after the update
+        List<Lot> updatedLots = new LotDBAccess().getAllLots();
+        this.lots = updatedLots;
         populateTable();
     }//GEN-LAST:event_btnBuyActionPerformed
 
