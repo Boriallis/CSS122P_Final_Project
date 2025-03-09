@@ -100,13 +100,7 @@ public class UserDisplay extends javax.swing.JFrame {
                     // Update the global session with the new account.
                     Session.setCurrentAccount(newAccount);
 
-                    // Optionally, if your UserAccount window is already open,
-                    // you might want to call an update method to refresh its display.
-                    // For example, if you keep a reference to the UserAccount frame:
-                    // userAccountFrame.updateDisplay();
-
-                    // Or you can simply close this UserDisplay window,
-                    // and in MainMenu (or wherever) re-open a fresh UserAccount frame.
+                   
                     this.dispose();
 
                     // Optionally, open the updated UserAccount frame:

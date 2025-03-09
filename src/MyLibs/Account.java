@@ -17,10 +17,8 @@ public class Account {
     }
     
     public static Account fromUser(User user) {
-        // You might want to instantiate an Account using the user's id
-        // and then set its balance directly based on the User data.
         Account account = new Account(user.getId());
-        account.balance = user.getBalance();  // Override the DB-fetch if appropriate.
+        account.balance = user.getBalance();
         return account;
     }
 
@@ -44,7 +42,6 @@ public class Account {
             balance -= amount;
             updateBalanceInDB();
         } else {
-            // Optionally, you can throw an exception or log an error if there's insufficient balance.
             System.out.println("Withdrawal failed: insufficient balance or invalid amount.");
         }
     }
@@ -78,6 +75,7 @@ public class Account {
         }
     }
     
+    //registers a new user
     public static boolean registerUser(String username, String password, double balance) {
         String query = "INSERT INTO users (username, password, balance) VALUES (?, ?, ?)";
         try (Connection conn = DBConnect.getConnection();
@@ -93,6 +91,7 @@ public class Account {
         }
     }
     
+    //fetches all users
     public static List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";

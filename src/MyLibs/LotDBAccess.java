@@ -123,12 +123,11 @@ public class LotDBAccess {
     
     public static List<Lot> searchLots(String block, double minSize, double maxSize, double minPrice, double maxPrice) {
     List<Lot> results = new ArrayList<>();
-    // Use LIKE with a wildcard so that input "Block 1" matches "Block 1 - Lot 1", "Block 1 - Lot 2", etc.
     String query = "SELECT * FROM lots WHERE location LIKE ? AND size BETWEEN ? AND ? AND price BETWEEN ? AND ?";
     try (Connection conn = DBConnect.getConnection();
          PreparedStatement stmt = conn.prepareStatement(query)) {
 
-        stmt.setString(1, block + "%");  // Append '%' to match any lot number after "Block 1"
+        stmt.setString(1, block + "%");
         stmt.setDouble(2, minSize);
         stmt.setDouble(3, maxSize);
         stmt.setDouble(4, minPrice);
@@ -156,7 +155,6 @@ public class LotDBAccess {
 
     
     //Updates lot status, sold or available
-    //For future ref, This can be called with updateLotStatus(5, "Sold"); (For ex)
     public void updateLotStatus(int id, String status) {
         try (Connection connect = DBConnect.getConnection();
              PreparedStatement ps = connect.prepareStatement("UPDATE lots SET status = ? WHERE id = ?")) {

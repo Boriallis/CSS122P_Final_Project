@@ -85,7 +85,6 @@ public class MainMenu extends javax.swing.JFrame {
         if (currentAccount == null) {
             // No user logged in – so create or load the default account.
             try {
-                // Ensure that a user with user_id 1 exists in your database.
                 currentAccount = new Account(1); // Make sure your Account constructor is fixed!
                 Session.setCurrentAccount(currentAccount);
                 System.out.println("Default account set: " + currentAccount.getUserId());

@@ -1,5 +1,6 @@
 package MyLibs;
 
+//to keep track of the current account user using the app
 public class Session {
     private static Account currentAccount;
     
